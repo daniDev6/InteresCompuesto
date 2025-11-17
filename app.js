@@ -2,7 +2,7 @@
 const principalInput = document.getElementById('principal');
 const rateInput = document.getElementById('rate');
 const yearsInput = document.getElementById('years');
-const reinvestInput = document.getElementById('reinvestPct');
+const inyectarInput = document.getElementById('inyectarPct');
 
 const calculateBtn = document.getElementById('calculate');
 const resetBtn = document.getElementById('reset');
@@ -32,27 +32,34 @@ function calculate() {
     const P = parseFloat(principalInput.value);
     const rPct = parseFloat(rateInput.value);
     const nYears = parseInt(yearsInput.value, 10);
-    const reinvestPct = parseFloat(reinvestInput.value);
+    const inyectarPct = parseFloat(inyectarInput.value);
 
-    if (isNaN(P) || P < 0 || isNaN(rPct) || isNaN(nYears) || nYears <= 0 || reinvestPct < 0 || reinvestPct > 10000) {
+    if (isNaN(P) || P < 0 || isNaN(rPct) || isNaN(nYears) || nYears <= 0 || inyectarPct < 0 || inyectarPct > 10000) {
         alert('Por favor verifica los valores. Años debe ser >= 1 y reinvertir entre 0 y 10000.');
         return;
     }
 
     const r = rPct / 100;
-    const reinvestFraction = reinvestPct / 100;
 
     let saldo = P;
     let totalInteres = 0;
     let totalReinvertido = 0;
-    let totalRetirado = 0;
 
     const rows = [];
 
     for (let year = 1; year <= nYears; year++) {
-        const interes = saldo * r;
-        const reinvertido = interes * reinvestFraction;
-        const saldoFin = saldo + reinvertido;
+        let interes;
+        let saldoFin 
+        if(year==1){
+             interes= saldo * r;
+        }else{
+            interes=saldo*r;
+
+        }
+        console.log("Soy interes= "+interes + " Soy saldo: "+saldo)
+        const reinvertido = interes+inyectarPct;
+        console.log("Soy el % de interes : " + r)
+        saldoFin = saldo + reinvertido;
 
         rows.push({
             year,
@@ -65,6 +72,7 @@ function calculate() {
         totalInteres += interes;
         totalReinvertido += reinvertido;
         saldo = saldoFin;
+        console.log("Soy reinvertido: "+ totalReinvertido);
     }
 
     // Poblamos la tabla
