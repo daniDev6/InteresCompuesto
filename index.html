@@ -177,7 +177,7 @@ function calculate() {
 
 function buildCSV(rows) {
     const headers = ['Año', 'Saldo inicio', 'Interés ganado', 'Reinvertido', 'Saldo fin'];
-    const lines = [headers.join(',')];
+    const lines = [headers.join(';')];
     rows.forEach(rw => {
         lines.push([
             rw.year,
@@ -185,7 +185,7 @@ function buildCSV(rows) {
             rw.interes.toFixed(2),
             rw.reinvertido.toFixed(2),
             rw.saldoFin.toFixed(2)
-        ].join(','));
+        ].join(';'));
     });
     return lines.join('\n');
 }
@@ -205,15 +205,17 @@ resetBtn.addEventListener('click', () => {
 
 exportBtn.addEventListener('click', () => {
     const csv = exportBtn.dataset.csv;
+     const bom = "\uFEFF";  
     if (!csv) {
         alert('Primero realiza el cálculo para poder exportar.');
         return;
     }
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([bom+csv], { type: 'text/csv;charset=UTF-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'interes_compuesto.csv';
+
     document.body.appendChild(a);
     a.click();
     a.remove();
